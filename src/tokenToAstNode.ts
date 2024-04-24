@@ -20,14 +20,20 @@ import {
   Image,
   RawInline,
   Delete,
+  Pos,
 } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
+import { MarkdownParseOptions, Warning } from "./types";
 
 /**
- * @param token MarkdownIt Token
- * @returns DJot AST Node
+ * Creates a new DJot AST node from one MarkdownIt token.
+ * If the token type is unknown then a div node is returned with a warning message.
  */
-export function tokenToAstNode(token: Token): any {
+export function tokenToAstNode(
+  token: Token,
+  options?: MarkdownParseOptions,
+  pos?: Pos
+): any {
   if (token.type === "paragraph_open") {
     return {
       tag: "para",
@@ -150,6 +156,17 @@ export function tokenToAstNode(token: Token): any {
       text: token.content,
     } as RawInline;
   } else {
-    throw new Error(`Unknown markdown-it token type: ${JSON.stringify(token)}`);
+    if (options?.warn) {
+      options.warn(
+        new Warning(
+          `Unknown markdown-it token type: ${JSON.stringify(token)}`,
+          pos?.start
+        )
+      );
+    }
+
+    return {
+      tag: "div",
+    } as Div;
   }
 }

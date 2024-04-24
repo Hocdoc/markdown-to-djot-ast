@@ -31,24 +31,14 @@ export function markdownItToDjotAst(
   const linestarts = options?.sourcePositions ? getLinestarts(input) : [];
 
   const createNode = (token: Token) => {
-    const node = tokenToAstNode(token);
-
-    if (options?.sourcePositions && token.map) {
-      const [startPos, endPos] = token.map;
-      // MarkdownIt just gives us the zero based line number for block tokens.
-      const startLine = startPos + 1;
-      const endLine = endPos + 1;
-      const endOffset = (linestarts[endLine] ?? input.length + 1) - 1;
-      const pos: Pos = {
-        start: { line: startLine, col: 1, offset: linestarts[startPos] + 1 },
-        end: {
-          line: endLine,
-          col: endOffset - linestarts[endLine - 1],
-          offset: endOffset,
-        },
-      };
+    const pos = options?.sourcePositions
+      ? getTokenPos(token, input, linestarts)
+      : undefined;
+    const node = tokenToAstNode(token, options, pos);
+    if (node) {
       node.pos = pos;
     }
+
     return node;
   };
 
@@ -73,6 +63,7 @@ export function markdownItToDjotAst(
   return doc;
 }
 
+/** Get the offsets of every newline in the input for the source positions. */
 function getLinestarts(input: string): number[] {
   const linestarts = [-1]; // Line numbers starts with 1 in djot
   for (let i = 0; i < input.length; i++) {
@@ -82,4 +73,30 @@ function getLinestarts(input: string): number[] {
   }
 
   return linestarts;
+}
+
+/**
+ * Gets the Djot position from a markdown-it token.
+ * MarkdownIt just gives us the zero based line number for block tokens.
+ * Position numbers starts with 1 in djot.
+ */
+function getTokenPos(
+  token: Token,
+  input: string,
+  linestarts: number[]
+): Pos | undefined {
+  if (!token.map) return undefined;
+
+  const [startPos, endPos] = token.map;
+  const startLine = startPos + 1;
+  const endLine = endPos + 1;
+  const endOffset = (linestarts[endLine] ?? input.length + 1) - 1;
+  return {
+    start: { line: startLine, col: 1, offset: linestarts[startPos] + 1 },
+    end: {
+      line: endLine,
+      col: endOffset - linestarts[endLine - 1],
+      offset: endOffset,
+    },
+  };
 }
