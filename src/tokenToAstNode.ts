@@ -20,12 +20,10 @@ import {
   Image,
   RawInline,
   Delete,
-  Pos,
-  AstNode,
   BulletListStyle,
 } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
-import { MarkdownParseOptions, TokenHandlersRecord, Warning } from "./types";
+import { TokenHandlersRecord } from "./types";
 
 export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   // Block tokens
