@@ -1,7 +1,7 @@
-import { Doc, Block, Inline, Pos } from "@djot/djot/types/ast";
+import { Doc, Block, Inline, Pos, Div } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
-import { tokenToAstNode } from "./tokenToAstNode";
-import { MarkdownParseOptions } from "./types";
+import { DEFAULT_TOKEN_HANDLERS } from "./tokenToAstNode";
+import { MarkdownParseOptions, Warning } from "./types";
 
 type NodeWithChildren = {
   children: Block[] | Inline[];
@@ -30,15 +30,31 @@ export function markdownItToDjotAst(
 
   const linestarts = options?.sourcePositions ? getLinestarts(input) : [];
 
-  const createNode = (token: Token) => {
+  const tokenHandlers = {
+    ...DEFAULT_TOKEN_HANDLERS,
+    ...options?.tokenHandlers,
+  };
+
+  const createNode = (token: Token): any => {
     const pos = options?.sourcePositions
       ? getTokenPos(token, input, linestarts)
       : undefined;
-    const node = tokenToAstNode(token, options, pos);
-    if (node) {
-      node.pos = pos;
+    const handler = tokenHandlers[token.type];
+
+    if (!handler && options?.warn) {
+      options.warn(
+        new Warning(
+          `Unknown markdown-it token type: ${JSON.stringify(token)}`,
+          pos?.start
+        )
+      );
     }
 
+    const node = handler
+      ? handler(token)
+      : ({ tag: "div", children: [] } as Div);
+
+    node.pos = pos;
     return node;
   };
 

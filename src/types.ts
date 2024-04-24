@@ -1,7 +1,11 @@
-import { SourceLoc } from "@djot/djot";
+import { AstNode, SourceLoc } from "@djot/djot";
 import { ParseOptions } from "@djot/djot/types/parse";
+import { Token } from "markdown-it";
 
-export interface MarkdownParseOptions extends ParseOptions {}
+export type TokenHandlersRecord = Record<string, (token: Token) => AstNode>;
+export interface MarkdownParseOptions extends ParseOptions {
+  tokenHandlers?: TokenHandlersRecord;
+}
 
 // This class is copied from `djot.js/src/options.ts` as the class is not exported.
 export class Warning {
