@@ -20,8 +20,12 @@ export function markdownItToDjotAst(
     children: [],
   };
 
-  const stack: NodeWithChildren[] = [];
-  let currentNode: NodeWithChildren = doc;
+  const stack: (NodeWithChildren | undefined)[] = [];
+
+  // Some tokens like thead_open should be ignored in Djot AST.
+  // So we have to track the currentNodeOrUndefined and parentNode.
+  let currentNodeOrUndefined: NodeWithChildren | undefined = doc;
+  let parentNode: NodeWithChildren = doc;
 
   // Include inline tokens to the block tokens
   const flatTokens = tokens.flatMap((x) =>
@@ -54,7 +58,7 @@ export function markdownItToDjotAst(
       ? handler(token)
       : ({ tag: "div", children: [] } as Div);
 
-    node.pos = pos;
+    if (node) node.pos = pos;
     return node;
   };
 
@@ -63,16 +67,19 @@ export function markdownItToDjotAst(
 
     if (token.nesting == 1) {
       const tmp = createNode(token);
-      tmp.children = [];
-      currentNode.children.push(tmp);
-      stack.push(currentNode);
-      currentNode = tmp;
+      if (tmp) {
+        parentNode.children.push(tmp);
+        parentNode = tmp;
+      }
+      stack.push(currentNodeOrUndefined);
+      currentNodeOrUndefined = tmp;
     } else if (token.nesting == -1) {
-      const tmp = stack.pop() as NodeWithChildren;
-      currentNode = tmp;
+      const tmp = stack.pop() as NodeWithChildren | undefined;
+      currentNodeOrUndefined = tmp;
+      if (tmp) parentNode = tmp;
     } else if (token.nesting == 0) {
       const tmp = createNode(token);
-      currentNode.children.push(tmp);
+      if (tmp) parentNode.children.push(tmp);
     }
   }
 

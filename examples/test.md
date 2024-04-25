@@ -10,9 +10,9 @@ I like H~2~0.
 ---
 
 | First Header | Second Header |
-| ------------ | ------------- |
-| Content Cell | Content Cell  |
-| Content Cell | Content Cell  |
+| ------------ | ------------: |
+| Content Cell |  Content Cell |
+| Content Cell |  Content Cell |
 
 2. Ordered _List_ 2
 3. Ordered List 3

@@ -9,7 +9,6 @@ import {
   BlockQuote,
   CodeBlock,
   Table,
-  Div,
   Row,
   Cell,
   Emph,
@@ -22,6 +21,7 @@ import {
   Delete,
   BulletListStyle,
   Subscript,
+  Alignment,
 } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
 import { TokenHandlersRecord } from "./types";
@@ -38,6 +38,7 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   fence,
   hr,
   table_open,
+  thead_open,
   tbody_open,
   tr_open,
   th_open,
@@ -135,12 +136,14 @@ function table_open(token: Token): Table {
   };
 }
 
-function tbody_open(): Div {
-  // TODO
-  return {
-    tag: "div",
-    children: [],
-  };
+/** <thead> is not in the Djot AST */
+function thead_open(): undefined {
+  return undefined;
+}
+
+/** <tbody> is not in the Djot AST */
+function tbody_open(): undefined {
+  return undefined;
 }
 
 function tr_open(): Row {
@@ -151,22 +154,38 @@ function tr_open(): Row {
   };
 }
 
-function th_open(): Cell {
+function th_open(token: Token): Cell {
   return {
     tag: "cell",
     head: true,
-    align: "default", // TODO
+    align: getCellAlignment(token),
     children: [],
   };
 }
 
-function td_open(): Cell {
+/*
+Table Head and Body wird in Djot nicht gerendert.
+a) Ignorieren von Head und Body -> Markup passt, aber header geh
+*/
+
+function td_open(token: Token): Cell {
   return {
     tag: "cell",
     head: false,
-    align: "default", // TODO
+    align: getCellAlignment(token),
     children: [],
   };
+}
+
+function getCellAlignment(token: Token): Alignment {
+  const style = token.attrGet("style");
+  if (style === "text-align:center") {
+    return "center";
+  } else if (style === "text-align:right") {
+    return "right";
+  } else {
+    return "default";
+  }
 }
 
 function text(token: Token): Str {

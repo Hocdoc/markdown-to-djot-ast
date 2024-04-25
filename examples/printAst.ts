@@ -4,6 +4,7 @@ import markdownit from "markdown-it";
 import markdownitSub from "markdown-it-sub";
 import { parseMarkdown } from "../src/main";
 import { parse as parseDjot, renderAST } from "@djot/djot";
+import { ParseOptions } from "@djot/djot/types/parse.js";
 
 /** Example to print an djot.js-AST from markdown and Djot files. */
 
@@ -17,9 +18,14 @@ if (process.argv.length !== 3) {
 const filename = process.argv[2];
 const input = readFileSync(filename, "utf8");
 
+const options: ParseOptions = {
+  sourcePositions: true,
+  warn: console.warn,
+};
+
 const doc =
   path.extname(filename) === ".md"
-    ? parseMarkdown(md, input, { sourcePositions: true })
-    : parseDjot(input, { sourcePositions: true });
+    ? parseMarkdown(md, input, options)
+    : parseDjot(input, options);
 
 console.log(renderAST(doc));

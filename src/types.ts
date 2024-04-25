@@ -2,7 +2,10 @@ import { AstNode, SourceLoc } from "@djot/djot";
 import { ParseOptions } from "@djot/djot/types/parse";
 import { Token } from "markdown-it";
 
-export type TokenHandlersRecord = Record<string, (token: Token) => AstNode>;
+export type TokenHandlersRecord = Record<
+  string,
+  (token: Token) => AstNode | undefined
+>;
 export interface MarkdownParseOptions extends ParseOptions {
   tokenHandlers?: TokenHandlersRecord;
 }
