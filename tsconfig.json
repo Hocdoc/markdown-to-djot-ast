@@ -2,6 +2,8 @@
   "compilerOptions": {
     "target": "es2022",
     "module": "es2022",
+    "declaration": true,
+    "outDir": "./dist",
     "moduleResolution": "node",
     "lib": ["dom", "es2022"],
     "experimentalDecorators": true,

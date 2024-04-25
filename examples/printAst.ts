@@ -5,7 +5,7 @@ import markdownitSub from "markdown-it-sub";
 import markdownitSup from "markdown-it-sup";
 import markdownitMark from "markdown-it-mark";
 import markdownitIns from "markdown-it-ins";
-import { parseMarkdown } from "../src/main";
+import { parseMarkdown } from "../src";
 import { parse as parseDjot, renderAST } from "@djot/djot";
 import { ParseOptions } from "@djot/djot/types/parse.js";
 

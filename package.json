@@ -2,8 +2,22 @@
   "name": "markdown-to-djot-ast",
   "version": "0.0.1",
   "license": "MIT",
+  "author": "Bernhard Berger",
+  "description": "A lightweight Javascript/Typescript library to convert Markdown content into a djot.js AST",
+  "keywords": [
+    "markup",
+    "djot",
+    "commonmark",
+    "markdown",
+    "markdown-it"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "node ./esbuild.js --dev",
+    "build": "tsc && node ./esbuild.js --dev",
     "build:meta": "node ./esbuild.js --dev --meta",
     "build:meta:prod": "node ./esbuild.js --meta",
     "build:prod": "node ./esbuild.js",
