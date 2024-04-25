@@ -15,3 +15,9 @@ declare module "markdown-it-mark" {
   const mark: (md: MarkdownIt) => void;
   export default mark;
 }
+
+declare module "markdown-it-ins" {
+  import MarkdownIt = require("markdown-it");
+  const ins: (md: MarkdownIt) => void;
+  export default ins;
+}
