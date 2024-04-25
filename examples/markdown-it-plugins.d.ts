@@ -9,3 +9,9 @@ declare module "markdown-it-sup" {
   const sup: (md: MarkdownIt) => void;
   export default sup;
 }
+
+declare module "markdown-it-mark" {
+  import MarkdownIt = require("markdown-it");
+  const mark: (md: MarkdownIt) => void;
+  export default mark;
+}

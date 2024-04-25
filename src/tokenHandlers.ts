@@ -23,6 +23,7 @@ import {
   Subscript,
   Alignment,
   Superscript,
+  Mark,
 } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
 import { TokenHandlersRecord } from "./types";
@@ -60,6 +61,7 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   // Plugins
   sub_open, // markdown-it-sub
   sup_open, // markdown-it-sup
+  mark_open, // markdown-it-mark
 };
 
 function paragraph_open(): Para {
@@ -266,6 +268,13 @@ function sub_open(): Subscript {
 function sup_open(): Superscript {
   return {
     tag: "superscript",
+    children: [],
+  };
+}
+
+function mark_open(): Mark {
+  return {
+    tag: "mark",
     children: [],
   };
 }

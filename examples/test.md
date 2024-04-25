@@ -1,4 +1,4 @@
-I like [djot.js](https://github.com/jgm/djot.js).
+I ==like== [djot.js](https://github.com/jgm/djot.js).
 
 ### Header
 
