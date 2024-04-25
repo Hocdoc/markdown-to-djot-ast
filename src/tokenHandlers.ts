@@ -163,11 +163,6 @@ function th_open(token: Token): Cell {
   };
 }
 
-/*
-Table Head and Body wird in Djot nicht gerendert.
-a) Ignorieren von Head und Body -> Markup passt, aber header geh
-*/
-
 function td_open(token: Token): Cell {
   return {
     tag: "cell",
@@ -245,7 +240,8 @@ function link_open(token: Token): Link {
 function image(token: Token): Image {
   return {
     tag: "image",
-    destination: token.attrGet("src") || undefined, // TODO: Alt
+    destination: token.attrGet("src") || undefined,
+    attributes: { alt: token.attrGet("title") ?? "" }, // TODO: Does markdown-it ignore the alt text?
     children: [],
   };
 }

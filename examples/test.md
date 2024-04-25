@@ -4,6 +4,8 @@ I like [djot.js](https://github.com/jgm/djot.js).
 
 I like H~2~0.
 
+![foo](/url "title")
+
 - List 1
 - List 2
 
