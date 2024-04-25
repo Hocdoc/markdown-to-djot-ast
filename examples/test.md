@@ -2,7 +2,7 @@ I like [djot.js](https://github.com/jgm/djot.js).
 
 ### Header
 
-I like H~2~0.
+I like H~2~0 2^4^.
 
 ![foo](/url "title")
 

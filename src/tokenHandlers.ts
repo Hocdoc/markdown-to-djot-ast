@@ -22,6 +22,7 @@ import {
   BulletListStyle,
   Subscript,
   Alignment,
+  Superscript,
 } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
 import { TokenHandlersRecord } from "./types";
@@ -58,6 +59,7 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
 
   // Plugins
   sub_open, // markdown-it-sub
+  sup_open, // markdown-it-sup
 };
 
 function paragraph_open(): Para {
@@ -257,6 +259,13 @@ function html_inline(token: Token): RawInline {
 function sub_open(): Subscript {
   return {
     tag: "subscript",
+    children: [],
+  };
+}
+
+function sup_open(): Superscript {
+  return {
+    tag: "superscript",
     children: [],
   };
 }
