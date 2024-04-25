@@ -9,13 +9,12 @@ The library leverages the famous [markdown-it](https://markdown-it.github.io/) p
 ## Install
 
 ```
-npm install markdownItToDjotAst
+npm install markdown-to-djot-ast
 ```
 
 ## Use
 
-```t
-
+```ts
 import { readFileSync } from "fs";
 import * as path from "path";
 import markdownit from "markdown-it";
@@ -31,7 +30,7 @@ const doc =
     ? parseMarkdown(md, input, { sourcePositions: true })
     : parseDjot(input, { sourcePositions: true });
 
-// Process Djot AST for Markdown and Djot in the same way, f.ex:
+// Process Markdown and Djot in the same way, f.ex:
 console.log(renderAST(doc));
 ```
 
