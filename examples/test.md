@@ -1,13 +1,18 @@
-Hallo _Welt!_
-
 I like [djot.js](https://github.com/jgm/djot.js).
 
 ### Header
+
+I like H~2~0.
 
 - List 1
 - List 2
 
 ---
+
+| First Header | Second Header |
+| ------------ | ------------- |
+| Content Cell | Content Cell  |
+| Content Cell | Content Cell  |
 
 2. Ordered _List_ 2
 3. Ordered List 3

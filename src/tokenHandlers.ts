@@ -21,6 +21,7 @@ import {
   RawInline,
   Delete,
   BulletListStyle,
+  Subscript,
 } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
 import { TokenHandlersRecord } from "./types";
@@ -39,6 +40,7 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   table_open,
   tbody_open,
   tr_open,
+  th_open,
   td_open,
 
   // Inline tokens
@@ -52,6 +54,9 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   link_open,
   image,
   html_inline,
+
+  // Plugins
+  sub_open, // markdown-it-sub
 };
 
 function paragraph_open(): Para {
@@ -146,10 +151,19 @@ function tr_open(): Row {
   };
 }
 
+function th_open(): Cell {
+  return {
+    tag: "cell",
+    head: true,
+    align: "default", // TODO
+    children: [],
+  };
+}
+
 function td_open(): Cell {
   return {
     tag: "cell",
-    head: false, // TODO
+    head: false,
     align: "default", // TODO
     children: [],
   };
@@ -168,6 +182,7 @@ function em_open(): Emph {
     children: [],
   };
 }
+
 function s_open(): Delete {
   return {
     tag: "delete",
@@ -221,5 +236,12 @@ function html_inline(token: Token): RawInline {
     tag: "raw_inline",
     format: "html",
     text: token.content,
+  };
+}
+
+function sub_open(): Subscript {
+  return {
+    tag: "subscript",
+    children: [],
   };
 }

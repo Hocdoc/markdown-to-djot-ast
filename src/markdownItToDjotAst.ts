@@ -1,6 +1,6 @@
 import { Doc, Block, Inline, Pos, Div } from "@djot/djot/types/ast";
 import { Token } from "markdown-it";
-import { DEFAULT_TOKEN_HANDLERS } from "./tokenToAstNode";
+import { DEFAULT_TOKEN_HANDLERS } from "./tokenHandlers";
 import { MarkdownParseOptions, Warning } from "./types";
 
 type NodeWithChildren = {

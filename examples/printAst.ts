@@ -1,12 +1,13 @@
 import { readFileSync } from "fs";
 import * as path from "path";
 import markdownit from "markdown-it";
+import markdownitSub from "markdown-it-sub";
 import { parseMarkdown } from "../src/main";
 import { parse as parseDjot, renderAST } from "@djot/djot";
 
 /** Example to print an djot.js-AST from markdown and Djot files. */
 
-const md = markdownit();
+const md = markdownit().use(markdownitSub);
 
 if (process.argv.length !== 3) {
   console.error("USAGE: printAst <filename.(md|dj)>");
