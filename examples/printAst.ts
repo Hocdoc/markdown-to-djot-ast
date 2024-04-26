@@ -5,9 +5,8 @@ import markdownitSub from "markdown-it-sub";
 import markdownitSup from "markdown-it-sup";
 import markdownitMark from "markdown-it-mark";
 import markdownitIns from "markdown-it-ins";
-import { parseMarkdown } from "../src";
+import { MarkdownParseOptions, parseMarkdown } from "../src/index.js";
 import { parse as parseDjot, renderAST } from "@djot/djot";
-import { ParseOptions } from "@djot/djot/types/parse.js";
 
 /** Example to print an djot.js-AST from markdown and Djot files. */
 
@@ -22,10 +21,10 @@ if (process.argv.length !== 3) {
   process.exit(1);
 }
 
-const filename = process.argv[2];
+const filename = process.argv[2] ?? "";
 const input = readFileSync(filename, "utf8");
 
-const options: ParseOptions = {
+const options: MarkdownParseOptions = {
   sourcePositions: true,
   warn: console.warn,
 };

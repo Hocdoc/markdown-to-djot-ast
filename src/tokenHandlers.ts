@@ -25,9 +25,9 @@ import {
   Superscript,
   Mark,
   Insert,
-} from "@djot/djot/types/ast";
-import { Token } from "markdown-it";
-import { TokenHandlersRecord } from "./types";
+} from "@djot/djot";
+import { type TokenHandlersRecord } from "./types.js";
+import { Token } from "markdown-it/index.js";
 
 export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   // Block tokens

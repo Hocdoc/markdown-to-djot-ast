@@ -1,4 +1,4 @@
-import { parseMarkdown } from ".";
+import { parseMarkdown } from "./index.js";
 import { renderAST } from "@djot/djot";
 import { readFileSync } from "fs";
 import markdownit from "markdown-it";

@@ -1,7 +1,7 @@
-import { Doc, Block, Inline, Pos, Div } from "@djot/djot/types/ast";
-import { Token } from "markdown-it";
-import { DEFAULT_TOKEN_HANDLERS } from "./tokenHandlers";
-import { MarkdownParseOptions, Warning } from "./types";
+import { Doc, Block, Inline, Pos, Div } from "@djot/djot";
+import { DEFAULT_TOKEN_HANDLERS } from "./tokenHandlers.js";
+import { MarkdownParseOptions, Warning } from "./types.js";
+import { Token } from "markdown-it/index.js";
 
 type NodeWithChildren = {
   children: Block[] | Inline[];
