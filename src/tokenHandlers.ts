@@ -25,6 +25,8 @@ import {
   Superscript,
   Mark,
   Insert,
+  Div,
+  Strong,
 } from "@djot/djot";
 import { type TokenHandlersRecord } from "./types.js";
 import { Token } from "markdown-it/index.js";
@@ -64,6 +66,8 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   sup_open, // markdown-it-sup
   mark_open, // markdown-it-mark
   ins_open, // markdown-it-ins
+  alert_open, // @mdit/plugin-alert
+  alert_title, // @mdit/plugin-alert
 };
 
 function paragraph_open(): Para {
@@ -285,5 +289,40 @@ function ins_open(): Insert {
   return {
     tag: "insert",
     children: [],
+  };
+}
+
+/**
+ * Unfortunately there is no standart for alerts in Djot.
+ * We use the classes from https://missing.style/ for the alerts.
+ */
+function alert_open(token: Token): Div {
+  return {
+    tag: "div",
+    children: [],
+    attributes: { class: alertTooMissingCssClass(token.attrs[0][1] ?? "") },
+  };
+}
+
+function alertTooMissingCssClass(classNames: string): string {
+  let result = "box ";
+  if (classNames.includes("markdown-alert-note")) {
+    result += "alert-note info";
+  } else if (classNames.includes("markdown-alert-important")) {
+    result += "alert-important ok";
+  } else if (classNames.includes("markdown-alert-tips")) {
+    result += "alert-tips warn";
+  } else if (classNames.includes("markdown-alert-warning")) {
+    result += "alert-warning warn";
+  } else if (classNames.includes("markdown-alert-caution")) {
+    result += "alert-caution bad";
+  }
+  return result;
+}
+
+function alert_title(token: Token): Strong {
+  return {
+    tag: "strong",
+    children: [{ tag: "str", text: token.content + ":" }],
   };
 }

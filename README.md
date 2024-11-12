@@ -40,6 +40,7 @@ console.log(renderAST(doc));
 - [markdown-it-sup](https://github.com/markdown-it/markdown-it-sup)
 - [markdown-it-mark](https://github.com/markdown-it/markdown-it-mark)
 - [markdown-it-ins](https://github.com/markdown-it/markdown-it-ins)
+- [@mdit/plugin-alert](https://mdit-plugins.github.io/alert.html)
 
 ## Custom token handler
 

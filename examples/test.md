@@ -1,5 +1,11 @@
 I ==like== [djot.js](https://github.com/jgm/djot.js).
 
+> [!note]
+> This is note text
+
+> [!important]
+> This is important text
+
 ### Header
 
 I like H~2~0 2^4^, ++yeah++.

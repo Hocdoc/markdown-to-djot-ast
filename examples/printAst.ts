@@ -5,6 +5,7 @@ import markdownitSub from "markdown-it-sub";
 import markdownitSup from "markdown-it-sup";
 import markdownitMark from "markdown-it-mark";
 import markdownitIns from "markdown-it-ins";
+import { alert } from "@mdit/plugin-alert";
 import { MarkdownParseOptions, parseMarkdown } from "../src/index.js";
 import { parse as parseDjot, renderAST } from "@djot/djot";
 
@@ -14,8 +15,8 @@ const md = markdownit()
   .use(markdownitSub)
   .use(markdownitSup)
   .use(markdownitMark)
-  .use(markdownitIns);
-
+  .use(markdownitIns)
+  .use(alert as any);
 if (process.argv.length !== 3) {
   console.error("USAGE: printAst <filename.(md|dj)>");
   process.exit(1);
