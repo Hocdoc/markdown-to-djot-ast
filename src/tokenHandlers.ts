@@ -27,6 +27,8 @@ import {
   Insert,
   Div,
   Strong,
+  DisplayMath,
+  InlineMath,
 } from "@djot/djot";
 import { type TokenHandlersRecord } from "./types.js";
 import { Token } from "markdown-it/index.js";
@@ -60,6 +62,7 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   link_open,
   image,
   html_inline,
+  math_inline, // Math plugins
 
   // Plugins
   sub_open, // markdown-it-sub
@@ -68,6 +71,7 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   ins_open, // markdown-it-ins
   alert_open, // @mdit/plugin-alert
   alert_title, // @mdit/plugin-alert
+  math_block, // Math plugins
 };
 
 function paragraph_open(): Para {
@@ -264,6 +268,13 @@ function html_inline(token: Token): RawInline {
   };
 }
 
+function math_inline(token: Token): InlineMath {
+  return {
+    tag: "inline_math",
+    text: token.content,
+  };
+}
+
 function sub_open(): Subscript {
   return {
     tag: "subscript",
@@ -324,5 +335,12 @@ function alert_title(token: Token): Strong {
   return {
     tag: "strong",
     children: [{ tag: "str", text: token.content + ":" }],
+  };
+}
+
+function math_block(token: Token): DisplayMath {
+  return {
+    tag: "display_math",
+    text: token.content,
   };
 }

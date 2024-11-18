@@ -1,5 +1,7 @@
 I ==like== [djot.js](https://github.com/jgm/djot.js).
 
+Math inline: $\sqrt{3x-1}+(1+x)^2$
+
 > [!note]
 > This is note text
 

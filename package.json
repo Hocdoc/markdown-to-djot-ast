@@ -1,6 +1,6 @@
 {
   "name": "markdown-to-djot-ast",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "author": "Bernhard Berger",
   "description": "A lightweight Javascript/Typescript library to convert Markdown content into a djot.js AST",
