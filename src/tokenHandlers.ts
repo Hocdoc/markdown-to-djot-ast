@@ -29,6 +29,10 @@ import {
   Strong,
   DisplayMath,
   InlineMath,
+  DefinitionList,
+  DefinitionListItem,
+  Term,
+  Definition,
 } from "@djot/djot";
 import { type TokenHandlersRecord } from "./types.js";
 import { Token } from "markdown-it/index.js";
@@ -72,6 +76,10 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   alert_open, // @mdit/plugin-alert
   alert_title, // @mdit/plugin-alert
   math_block, // Math plugins
+
+  dl_open, // markdown-it-deflist
+  dt_open, // markdown-it-deflist
+  dd_open, // markdown-it-deflist
 };
 
 function paragraph_open(): Para {
@@ -342,5 +350,26 @@ function math_block(token: Token): DisplayMath {
   return {
     tag: "display_math",
     text: token.content,
+  };
+}
+
+function dl_open(token: Token): DefinitionList {
+  return {
+    tag: "definition_list",
+    children: [],
+  };
+}
+
+function dt_open(token: Token): DefinitionListItem {
+  return {
+    tag: "definition_list_item",
+    children: [{ tag: "term", children: [] }] as any,
+  };
+}
+
+function dd_open(token: Token): Definition {
+  return {
+    tag: "definition",
+    children: [],
   };
 }

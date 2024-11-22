@@ -41,6 +41,7 @@ console.log(renderAST(doc));
 - [markdown-it-mark](https://github.com/markdown-it/markdown-it-mark)
 - [markdown-it-ins](https://github.com/markdown-it/markdown-it-ins)
 - [@mdit/plugin-alert](https://mdit-plugins.github.io/alert.html)
+- [markdown-it-deflist](https://github.com/markdown-it/markdown-it-deflist)
 - Math Plugins (`math_inline`, `math_block`)
 
 ## Custom token handler
