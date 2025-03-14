@@ -112,7 +112,7 @@ function getTokenPos(
 
   const [startPos, endPos] = token.map;
   const startLine = startPos + 1;
-  const endLine = endPos + 1;
+  const endLine = endPos;
   const endOffset = (linestarts[endLine] ?? input.length + 1) - 1;
   return {
     start: { line: startLine, col: 1, offset: linestarts[startPos] + 1 },
