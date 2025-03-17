@@ -39,9 +39,9 @@ export function markdownItToDjotAst(
     ...options?.tokenHandlers,
   };
 
-  const createNode = (token: Token): any => {
+  const createNode = (token: Token, previousToken: Token | undefined): any => {
     const pos = options?.sourcePositions
-      ? getTokenPos(token, input, linestarts)
+      ? getTokenPos(token, input, linestarts, previousToken)
       : undefined;
     const handler = tokenHandlers[token.type];
 
@@ -64,9 +64,10 @@ export function markdownItToDjotAst(
 
   for (let i = 0; i < flatTokens.length; i++) {
     const token = flatTokens[i];
+    const previousToken = i > 0 ? flatTokens[i - 1] : undefined;
 
     if (token.nesting == 1) {
-      const tmp = createNode(token);
+      const tmp = createNode(token, previousToken);
       if (tmp) {
         parentNode.children.push(tmp);
         parentNode = tmp;
@@ -78,7 +79,7 @@ export function markdownItToDjotAst(
       currentNodeOrUndefined = tmp;
       if (tmp) parentNode = tmp;
     } else if (token.nesting == 0) {
-      const tmp = createNode(token);
+      const tmp = createNode(token, previousToken);
       if (tmp) parentNode.children.push(tmp);
     }
   }
@@ -106,13 +107,23 @@ function getLinestarts(input: string): number[] {
 function getTokenPos(
   token: Token,
   input: string,
-  linestarts: number[]
+  linestarts: number[],
+  previousToken: Token | undefined
 ): Pos | undefined {
   if (!token.map) return undefined;
 
   const [startPos, endPos] = token.map;
-  const startLine = startPos + 1;
+
+  let startLine = startPos + 1;
   const endLine = endPos;
+
+  // Markdown-it takes the last character before the newline as start line of the next token.
+  // So we have to adjust the start line for block tokens. 
+  if (startPos < endPos && previousToken) {
+    const previousEndLine = previousToken.map?.[1];
+    startLine = previousEndLine + 1;
+  }
+
   const endOffset = (linestarts[endLine] ?? input.length + 1) - 1;
   return {
     start: { line: startLine, col: 1, offset: linestarts[startPos] + 1 },
