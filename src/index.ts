@@ -1,4 +1,5 @@
 import { Doc } from "@djot/djot";
+import MarkdownIt from "markdown-it";
 import { markdownItToDjotAst } from "./markdownItToDjotAst.js";
 import { MarkdownParseOptions } from "./types.js";
 export * from "./markdownItToDjotAst.js";

@@ -11,7 +11,8 @@
     "lib": ["es2022"],
     "outDir": "dist",
     "moduleResolution": "NodeNext",
-    "module": "NodeNext"
+    "module": "NodeNext",
+    "isolatedModules": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
