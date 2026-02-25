@@ -34,26 +34,12 @@ import {
   Term,
   Definition,
   AstNode,
+  TaskList,
+  TaskListItem,
+  Block,
 } from "@djot/djot";
 import { type TokenHandlersRecord } from "./types.js";
 import { Token } from "markdown-it/index.js";
-
-// Add missing Djot types if they are not exported or to be used in our handlers
-type TaskList = {
-  tag: "task_list";
-  tight: boolean;
-  children: TaskListItem[];
-  attributes?: Record<string, string>;
-  pos?: any;
-};
-
-type TaskListItem = {
-  tag: "task_list_item";
-  checkbox: "checked" | "unchecked";
-  children: AstNode[];
-  attributes?: Record<string, string>;
-  pos?: any;
-};
 
 export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   // Block tokens
