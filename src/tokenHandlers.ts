@@ -33,9 +33,27 @@ import {
   DefinitionListItem,
   Term,
   Definition,
+  AstNode,
 } from "@djot/djot";
 import { type TokenHandlersRecord } from "./types.js";
 import { Token } from "markdown-it/index.js";
+
+// Add missing Djot types if they are not exported or to be used in our handlers
+type TaskList = {
+  tag: "task_list";
+  tight: boolean;
+  children: TaskListItem[];
+  attributes?: Record<string, string>;
+  pos?: any;
+};
+
+type TaskListItem = {
+  tag: "task_list_item";
+  checkbox: "checked" | "unchecked";
+  children: AstNode[];
+  attributes?: Record<string, string>;
+  pos?: any;
+};
 
 export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   // Block tokens
@@ -76,6 +94,11 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   alert_open, // @mdit/plugin-alert
   alert_title, // @mdit/plugin-alert
   math_block, // Math plugins
+  
+  // Task list tokens (from @mdit/plugin-tasklist)
+  checkbox_input,
+  label_open: () => undefined,
+  label_close: () => undefined,
 };
 
 function paragraph_open(): Para {
@@ -104,21 +127,43 @@ function ordered_list_open(token: Token): OrderedList {
   };
 }
 
-function bullet_list_open(token: Token): BulletList {
+function bullet_list_open(token: Token): BulletList | TaskList {
+  const isTaskList = token.attrGet("class")?.includes("task-list-container");
+  if (isTaskList) {
+    return {
+      tag: "task_list",
+      tight: true,
+      children: [],
+    };
+  }
   return {
     tag: "bullet_list",
-    tight: true, // TODO
+    tight: true,
     style: token.markup as BulletListStyle,
     children: [],
   };
 }
 
-function list_item_open(): ListItem {
+function list_item_open(token: Token): ListItem | TaskListItem {
+  const isTaskListItem = token.attrGet("class")?.includes("task-list-item");
+  if (isTaskListItem) {
+    return {
+      tag: "task_list_item",
+      checkbox: "unchecked", // Default, will be updated by checkbox_input
+      children: [],
+    };
+  }
   return {
     tag: "list_item",
     children: [],
   };
 }
+
+function checkbox_input(token: Token): undefined {
+  // This token is handled specially in markdownItToDjotAst to update the parent task_list_item
+  return undefined;
+}
+
 function blockquote_open(): BlockQuote {
   return {
     tag: "block_quote",
@@ -154,7 +199,7 @@ function table_open(token: Token): Table {
   };
 }
 
-/** <thead> is not in the Djot AST */
+/** <thead> is not in the Djot AST but we use it to mark the next rows as headers */
 function thead_open(): undefined {
   return undefined;
 }
@@ -164,10 +209,10 @@ function tbody_open(): undefined {
   return undefined;
 }
 
-function tr_open(): Row {
+function tr_open(token: Token): Row {
   return {
     tag: "row",
-    head: false, // TODO
+    head: false, // Will be updated in markdownItToDjotAst if inside thead
     children: [],
   };
 }
@@ -315,7 +360,7 @@ function alert_open(token: Token): Div {
   return {
     tag: "div",
     children: [],
-    attributes: { class: alertTooMissingCssClass(token.attrs[0][1] ?? "") },
+    attributes: { class: alertTooMissingCssClass(token.attrs?.[0]?.[1] ?? "") },
   };
 }
 
@@ -325,7 +370,7 @@ function alertTooMissingCssClass(classNames: string): string {
     result += "alert-note info";
   } else if (classNames.includes("markdown-alert-important")) {
     result += "alert-important ok";
-  } else if (classNames.includes("markdown-alert-tips")) {
+  } else if (classNames.includes("markdown-alert-tip")) {
     result += "alert-tips warn";
   } else if (classNames.includes("markdown-alert-warning")) {
     result += "alert-warning warn";
@@ -348,3 +393,4 @@ function math_block(token: Token): DisplayMath {
     text: token.content,
   };
 }
+

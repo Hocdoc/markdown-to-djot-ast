@@ -39,6 +39,8 @@ export function markdownItToDjotAst(
     ...options?.tokenHandlers,
   };
 
+  let inThead = false;
+
   const createNode = (token: Token, previousToken: Token | undefined): any => {
     const pos = options?.sourcePositions
       ? getTokenPos(token, input, linestarts, previousToken)
@@ -66,9 +68,15 @@ export function markdownItToDjotAst(
     const token = flatTokens[i];
     const previousToken = i > 0 ? flatTokens[i - 1] : undefined;
 
+    if (token.type === "thead_open") inThead = true;
+    if (token.type === "thead_close") inThead = false;
+
     if (token.nesting == 1) {
       const tmp = createNode(token, previousToken);
       if (tmp) {
+        if (tmp.tag === "row" && inThead) {
+          tmp.head = true;
+        }
         parentNode.children.push(tmp);
         parentNode = tmp;
       }
@@ -79,8 +87,37 @@ export function markdownItToDjotAst(
       currentNodeOrUndefined = tmp;
       if (tmp) parentNode = tmp;
     } else if (token.nesting == 0) {
-      const tmp = createNode(token, previousToken);
-      if (tmp) parentNode.children.push(tmp);
+      if (token.type === "checkbox_input") {
+        const checked = token.attrGet("checked");
+        // Search up the stack for task_list_item
+        if (currentNodeOrUndefined && (currentNodeOrUndefined as any).tag === "task_list_item") {
+          (currentNodeOrUndefined as any).checkbox = checked ? "checked" : "unchecked";
+        } else {
+          for (let j = stack.length - 1; j >= 0; j--) {
+            const node = stack[j];
+            if (node && (node as any).tag === "task_list_item") {
+              (node as any).checkbox = checked ? "checked" : "unchecked";
+              break;
+            }
+          }
+        }
+
+        // Trim space from next text token if it exists (usually added by the tasklist plugin)
+        for (let j = i + 1; j < flatTokens.length; j++) {
+          const nextToken = flatTokens[j];
+          if (nextToken.type === "text") {
+            if (nextToken.content.startsWith(" ")) {
+              nextToken.content = nextToken.content.substring(1);
+            }
+            break;
+          }
+          // Skip label_open and other potential wrappers
+          if (nextToken.type !== "label_open") break;
+        }
+      } else {
+        const tmp = createNode(token, previousToken);
+        if (tmp) parentNode.children.push(tmp);
+      }
     }
   }
 

@@ -11,6 +11,9 @@ importers:
       '@djot/djot':
         specifier: ^0.3.2
         version: 0.3.2
+      '@mdit/plugin-tasklist':
+        specifier: ^0.23.0
+        version: 0.23.0(markdown-it@14.1.1)
       '@types/markdown-it':
         specifier: ^14.1.2
         version: 14.1.2
@@ -510,6 +513,15 @@ packages:
 
   '@mdit/plugin-alert@0.22.4':
     resolution: {integrity: sha512-6j7nvq8MkKrT2DxQ5/dlK3vhwU0qd7i3ShP/Ns41ltyjsT/H4PiXrW6itRPLJqKhX5vAy4akK0djSALkawoFNQ==}
+    peerDependencies:
+      markdown-it: ^14.1.0
+    peerDependenciesMeta:
+      markdown-it:
+        optional: true
+
+  '@mdit/plugin-tasklist@0.23.0':
+    resolution: {integrity: sha512-i4UHa8aQakHq3I7xS9EzYyL4LF4+/hnyZxMV4mJa8xdw9sJzmt/JVkLUESoaXdOELTzJz6Q4OtgYikrkJ9+eIQ==}
+    engines: {node: '>= 20'}
     peerDependencies:
       markdown-it: ^14.1.0
     peerDependenciesMeta:
@@ -2616,6 +2628,12 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   '@mdit/plugin-alert@0.22.4(markdown-it@14.1.1)':
+    dependencies:
+      '@types/markdown-it': 14.1.2
+    optionalDependencies:
+      markdown-it: 14.1.1
+
+  '@mdit/plugin-tasklist@0.23.0(markdown-it@14.1.1)':
     dependencies:
       '@types/markdown-it': 14.1.2
     optionalDependencies:
