@@ -4,6 +4,7 @@ import markdownitSub from "markdown-it-sub";
 import markdownitSup from "markdown-it-sup";
 import markdownitMark from "markdown-it-mark";
 import markdownitIns from "markdown-it-ins";
+import markdownitFootnote from "markdown-it-footnote";
 import { alert } from "@mdit/plugin-alert";
 import { tasklist } from "@mdit/plugin-tasklist";
 import { markdownItToDjotAst } from "./markdownItToDjotAst.js";
@@ -24,6 +25,7 @@ export function createDefaultMarkdownIt(): MarkdownIt {
     .use(markdownitSup)
     .use(markdownitMark)
     .use(markdownitIns)
+    .use(markdownitFootnote)
     .use(alert as any)
     .use(tasklist as any);
 }

@@ -77,7 +77,11 @@ export function markdownItToDjotAst(
         if (tmp.tag === "row" && inThead) {
           tmp.head = true;
         }
-        parentNode.children.push(tmp);
+        if (tmp.tag === "footnote") {
+          doc.footnotes[tmp.label] = tmp;
+        } else {
+          parentNode.children.push(tmp);
+        }
         parentNode = tmp;
       }
       stack.push(currentNodeOrUndefined);
@@ -85,7 +89,11 @@ export function markdownItToDjotAst(
     } else if (token.nesting == -1) {
       const tmp = stack.pop() as NodeWithChildren | undefined;
       currentNodeOrUndefined = tmp;
-      if (tmp) parentNode = tmp;
+      if (tmp) {
+        // If we just finished a footnote, we need to restore parentNode to something sensible.
+        // But the stack logic should already handle this.
+        parentNode = tmp;
+      }
     } else if (token.nesting == 0) {
       if (token.type === "checkbox_input") {
         const checked = token.attrGet("checked");

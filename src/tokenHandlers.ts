@@ -37,6 +37,8 @@ import {
   TaskList,
   TaskListItem,
   Block,
+  FootnoteReference,
+  Footnote,
 } from "@djot/djot";
 import { type TokenHandlersRecord } from "./types.js";
 import { Token } from "markdown-it/index.js";
@@ -85,6 +87,14 @@ export const DEFAULT_TOKEN_HANDLERS: TokenHandlersRecord = {
   checkbox_input,
   label_open: () => undefined,
   label_close: () => undefined,
+
+  // Footnote tokens (from markdown-it-footnote)
+  footnote_ref,
+  footnote_open: footnote_open_handler,
+  footnote_close: () => undefined,
+  footnote_block_open: () => undefined,
+  footnote_block_close: () => undefined,
+  footnote_anchor: () => undefined,
 };
 
 function paragraph_open(): Para {
@@ -377,6 +387,21 @@ function math_block(token: Token): DisplayMath {
   return {
     tag: "display_math",
     text: token.content,
+  };
+}
+
+function footnote_ref(token: Token): FootnoteReference {
+  return {
+    tag: "footnote_reference",
+    text: token.meta.label,
+  };
+}
+
+function footnote_open_handler(token: Token): Footnote {
+  return {
+    tag: "footnote",
+    label: token.meta.label,
+    children: [],
   };
 }
 
